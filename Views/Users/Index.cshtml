@@ -1,0 +1,42 @@
+@using ese01.Models
+@model IEnumerable<UserModel>
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Users</h1>
+    <div class="card">
+        <div class="card-content">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover mb-0 align-middle">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Cognome</th>
+                            <th>Data di nascita</th>
+                            <th>Luogo di nascita</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (UserModel user in Model)
+                        {
+                            <tr>
+                                <td>@user.Name</td>
+                                <td>@user.Surname</td>
+                                <td>@user.DateOfBirth.ToShortDateString()</td>
+                                <td>@user.PlaceOfBirth</td>
+                                <td>
+                                    <a asp-controller="Users" asp-action="UserDetail" asp-route-userId="@user.Id">
+                                        <button type="button" class="btn btn-primary">Details</button>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
