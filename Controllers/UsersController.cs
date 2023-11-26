@@ -1,24 +1,60 @@
 using ese01.Models;
+using ese01.Models.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ese01.Controllers
 {
-    public class UsersController : Controller
+
+    // public class UsersController : Controller
+    // {
+    //     private readonly IUsersService _usersService;
+    //     public UsersController(IUsersService userService)
+    //     {
+    //         _usersService = userService;
+    //     }
+
+    public class UsersController(IUsersService usersService) : Controller
     {
-        private List<UserModel> users = new List<UserModel>
-            {
-                new UserModel(1,"Paolino","Paperino", new DateTime(1934,5,29), "San Francisco"),
-                new UserModel(2,"Giuseppe","Garibaldi", new DateTime(1790,10,5), "Nizza"),
-            };
+        private readonly IUsersService _usersService = usersService;
 
         public IActionResult Index()
         {
-            return View(users);
+            return View(_usersService.GetAll());
         }
 
-        public IActionResult Detail(string id)
+        public IActionResult UserDetail(int userId)
         {
-            return Content($"Sono Detail e l'id che ho ricevuto è {id}");
+            return View(_usersService.FindById(userId));
+        }
+
+        public IActionResult NewUser()
+        {
+            return View();
+        }
+        public IActionResult AddUser()
+        {
+            string name = Request.Form["Name"].ToString();
+            string surname = Request.Form["Surname"].ToString(); ;
+            DateTime dateOfBirth = Convert.ToDateTime(Request.Form["DateOfBirth"]);
+            string placeOfBirth = Request.Form["PlaceOfBirth"].ToString(); ;
+
+            UserModel newUser = new UserModel
+            (
+                -1,
+                name,
+                surname,
+                dateOfBirth,
+                placeOfBirth
+            );
+            _usersService.Add(newUser);
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult DeleteUser(int id)
+        {
+            _usersService.DeleteById(id);
+            return RedirectToAction("Index");
         }
     }
 }
