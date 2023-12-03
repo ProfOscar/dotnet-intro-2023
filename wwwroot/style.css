@@ -1,0 +1,13 @@
+ footer {
+     position: fixed;
+     bottom: 0
+ }
+
+ .logo {
+     height: 18px;
+     margin: 10px;
+ }
+
+ .fit-content {
+     width: fit-content;
+ }
